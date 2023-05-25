@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Deck of Cards{% endblock %}
+
+
+{% block body %}
+<body class="bg-success text-dark">
+{% endblock %}
+
+{% block content %}
+    <h4 class="load-msg">Generating deck...</h4>
+    <h4 class="end-msg">End of deck reached!</h4>
+    <button class="cards-btn btn btn-lg btn-warning mb-5 text-dark">Draw Card</button>
+    <div class="drawn-area mt-5"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/cards.js"></script>
+{% endblock %}

@@ -1,0 +1,10 @@
+.drawn-area > *{
+    position: absolute;
+    left:0;
+    right: 0;
+    margin:auto
+}
+
+.cards-btn, .end-msg{
+    display:none
+}

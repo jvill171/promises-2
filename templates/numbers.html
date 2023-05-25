@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Number Facts{% endblock %}
+
+{% block content %}
+    <div class="text-start">
+        <div>
+            <h1>1: Favorite Number</h1>
+            <ul class="fav-num"></ul>
+        </div>
+        <div>
+            <h1>2: Multiple Numbers</h1>
+            <ul class="num-list"></ul>
+        </div>
+        <div>
+            <h1>3: Favorite Number (4 Facts)</h1>
+            <ul class="fav-list"></ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/numbers.js"></script>
+{% endblock %}
