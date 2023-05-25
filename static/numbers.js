@@ -7,33 +7,31 @@ const $numList = $(".num-list")
 const $favList = $(".fav-list")
 
 // 13
-axios.get(`${baseURL}/${favNum}?json`)
-    .then(res =>
-        $favNum.append(
-            `<li>${res.data.text}</li>`
-            )
-    )
+async function part1(){
+    let oneFact = await axios.get(`${baseURL}/${favNum}?json`)
+    $favNum.append( `<li>${oneFact.data.text}</li>`)
+}
 
 //[13, 21, 96]
-axios.get(`${baseURL}/${numList}?json`)
-    .then(res =>{
-        for(k in res.data){
-            $numList.append(
-                `<li>${res.data[k]}</li>`
-                )
-        }
-    })
+async function part2(){
+    let threeFacts = await axios.get(`${baseURL}/${numList}?json`)
+    for(k in threeFacts.data){
+        $numList.append( `<li>${threeFacts.data[k]}</li>`)
+    }
+}
 
 //13 - (4 facts)
-Promise.all(
-    Array.from({ length: 4 }, ()=>{
+async function part3(){
+    let fourFacts = await Promise.all(
+        Array.from({ length: 4 }, ()=>{
         return axios.get(`${baseURL}/${favNum}?json`)
+    }))
+    fourFacts.forEach(fact =>{
+        $($favList.append( `<li>${fact.data.text}</li>` ))
     })
-)
-.then(res =>{
-    res.forEach(fact =>{
-        $($favList.append(
-            `<li>${fact.data.text}</li>`
-        ))
-    })
-})
+}
+
+// Run all async functions
+part1();
+part2();
+part3();
