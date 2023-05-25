@@ -1,63 +1,60 @@
 const baseURL = 'https://deckofcardsapi.com/api/deck';
 
 // 1
-axios.get(`${baseURL}/new/draw`)
-    .then(res =>{
-        let {suit, value} = res.data.cards[0]
-        console.log(`${value.toLowerCase()} of ${suit.toLowerCase()}`)
-    })
+async function part1(){
+    let res = await axios.get(`${baseURL}/new/draw`)
+    let {suit, value} = res.data.cards[0]
+    console.log("\n\n====================== Part 1 ======================")
+    console.log(`${value.toLowerCase()} of ${suit.toLowerCase()}`)
+}
 
 // 2
 let cards = []
-axios.get(`${baseURL}/new/draw`)
-.then(res =>{
-    let deck_id = res.data.deck_id
-    cards.push(res.data.cards[0])
-    return axios.get(`${baseURL}/${deck_id}/draw`)
-})
-.then(res =>{
-    cards.push(res.data.cards[0])
+async function part2(){
+    let card = await axios.get(`${baseURL}/new/draw`)
+    let deck_id = card.data["deck_id"]
+    
+    cards.push(card.data)
+    card = await axios.get(`${baseURL}/${deck_id}/draw`)
+    cards.push(card.data)
+    
+    console.log("\n\n====================== Part 2 ======================")
     for(c of cards){
-        console.log(`${c.value.toLowerCase()} of ${c.suit.toLowerCase()}`)
+        console.log(`${c.cards[0].value.toLowerCase()} of ${c.cards[0].suit.toLowerCase()}`)
     }
-})
+}
 
 // 3
-let deck_id = null;
-let $btn = $("button")
-let $load = $(".load-msg")
-let $end = $(".end-msg")
-let $drawnArea = $('.drawn-area')
+async function part3(){
+    let $btn = $("button")
+    let $load = $(".load-msg")
+    let $end = $(".end-msg")
+    let $drawnArea = $('.drawn-area')
 
-axios.get(`${baseURL}/new/shuffle`)
-    .then(res=>{
-        deck_id = res.data.deck_id
-        // Display button after deck has been returned from API
-        $load.hide()
-        $btn.show()
-    })
-
-$btn.on('click', () =>{
-    axios.get(`${baseURL}/${deck_id}/draw/`)
-        .then(res =>{
-            let cardImg = res.data.cards[0].image;
-
-            let randX = Math.random() * 40 - 20;
-            let randY = Math.random() * 40 - 20;
-            let randAngle = Math.random() * 90 - 45;
-
-            // Add image of card to $drawnArea
-            $drawnArea.append(
-                $('<img>', {
-                    src: cardImg,
-                    css: {
-                        transform: `translate(${randX}px, ${randY}px) rotate(${randAngle}deg)`
-                    }
-                })
-            )
+    let myDeck = await axios.get(`${baseURL}/new/shuffle`)
+    $load.hide()
+        $btn.show().on("click", async ()=>{
+            try{
+                let res = await axios.get(`${baseURL}/${myDeck.data.deck_id}/draw/`)
+                let cardImg = res.data.cards[0].image;
+        
+                let randX = Math.random() * 40 - 20;
+                let randY = Math.random() * 40 - 20;
+                let randAngle = Math.random() * 90 - 45;
+                // Add image of card to $drawnArea
+                $drawnArea.append(
+                    $('<img>', {
+                        src: cardImg,
+                        css: {  transform: `translate(${randX}px, ${randY}px) rotate(${randAngle}deg)` }
+                    }))
+            }
+            catch{
+                $end.show()
+            }
         })
-        .catch(err =>{
-            console.log(err)
-            $end.show()
-        })
-})
+}
+
+// Run async functions
+part1();
+part2();
+part3();
